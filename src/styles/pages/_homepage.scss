@@ -1,0 +1,68 @@
+section {
+    display: block;
+    width: 100vw; /* Assure que le conteneur prend toute la largeur */
+    height: 100vh; /* Assure que le conteneur prend toute la hauteur */
+}
+
+img {
+    width: 300px;  /* Les images prendront toute la largeur disponible */
+    height: auto; /* L'aspect ratio est conservé */
+}
+
+.homepage {
+    max-height: 95vh;  /* La hauteur de la homepage est limitée à 95% de la hauteur de la fenêtre */
+    width: 100vw; /* Utiliser toute la largeur de la fenêtre */
+    overflow: hidden; /* Pour éviter tout débordement */
+}
+
+.game {
+    display: block;
+    height: 90vh; /* La hauteur de la section game est de 50% de la hauteur de la fenêtre */
+    width: 100vw; /* Utilise toute la largeur */
+}
+
+.castle {
+    width: 100vw; /* Utiliser toute la largeur de la fenêtre */
+    height: 100%; /* Utiliser 90% de la hauteur de la fenêtre */
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Placer la castle en dessous */
+}
+
+.heroes {
+    display: flex;
+    position: absolute;
+    top: 54vh; /* Positionnement relatif à .castle (54% de la hauteur de la fenêtre) */
+    left: 10vw; /* Positionnement relatif à .castle (10% de la largeur de la fenêtre) */
+    z-index: 2; /* Assurez-vous que .heroes est au-dessus de .castle */
+    width: 80vw;
+    height: fit-content;
+}
+
+.reverse {
+    transform: scale(-1, 1); /* Retourner l'image horizontalement */
+}
+
+.log {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100px;
+    width: 100vw; /* Utiliser toute la largeur */
+    height: 20vh;
+    z-index: 2; /* Placer le log au-dessus des autres éléments */
+    text-align: center;
+}
+
+.paladins {
+    /* Si vous souhaitez ajouter des styles supplémentaires pour cette classe, vous pouvez les ajouter ici */
+}
+
+.paladins01 {
+    /* Styles pour paladins01 */
+}
+
+.paladins02 {
+    /* Styles pour paladins02 */
+}
