@@ -11,6 +11,14 @@ header {
   width: 95%;
   z-index: 5;
 
+  & .navbar__logo{
+    display: flex;
+    img{
+      height: 60px;
+      width: auto;
+    }
+  }
+
   & .title-link {
     align-items: center;
     color: $white;

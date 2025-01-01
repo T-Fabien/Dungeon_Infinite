@@ -60,6 +60,13 @@ header {
   width: 95%;
   z-index: 5;
 }
+header .navbar__logo {
+  display: flex;
+}
+header .navbar__logo img {
+  height: 60px;
+  width: auto;
+}
 header .title-link {
   align-items: center;
   color: #FFFFFF;

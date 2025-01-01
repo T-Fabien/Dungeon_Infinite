@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
+import logo from "../assets/logo.png";
+
 function Navbar() {
   const [showMenu, SetShowMenu] = useState(false);
 
@@ -10,9 +12,9 @@ function Navbar() {
 
   return (
     <header>
-      <div>
+      <div className="navbar__logo">
         <NavLink to="/" end className="title-link">
-          Dungeon_Infinite
+        <img src={logo} alt="" />
         </NavLink>
         <nav className={`navbar ${showMenu ? "showmenu" : "hidemenu"}`}>
           <ul className="navbar__content">
