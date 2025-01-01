@@ -5,9 +5,7 @@ export default class Paladin extends Creature {
   constructor(name) {
     super(name, "Paladin", 1); // Appel au constructeur de la classe parent
     this.health = 120; // Les paladins commencent avec plus de santé
-    this.mana = 80; // Moins de mana au départ
     this.maxHealth = 120;
-    this.maxMana = 80;
     this.skills = ["Coup de base", "Lumière sacrée", "Bouclier divin"];
     this.armor = 10; // Le Paladin commence avec de l'armure
   }

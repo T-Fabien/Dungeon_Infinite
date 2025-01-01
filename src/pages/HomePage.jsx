@@ -1,15 +1,22 @@
 import { useState } from "react";
 import useStore from "../store/useStore"; // Importer le store
 
-import castle from "../assets/castle.png";
-import paladins_1 from "../assets/paladins_1.png";
-import paladins_2 from "../assets/paladins_2.png";
+// Scene
+import castle from "../assets/scene/castle.png";
 
-import fire_mage from "../assets/fire_mage.png";
+// Characters
+import paladins_1 from "../assets/characters/paladins_1.png";
+import fire_mage from "../assets/characters/fire_mage.png";
+
+// Status effects
+import fire from "../assets/statut/fire.png";
+
+// Other
+import shield from "../assets/shield.png";
+import star from "../assets/star.png";
 
 function Homepage() {
-  const { team_heroes, team_enemies, log, gainXP, useSkill } =
-    useStore();
+  const { team_heroes, team_enemies, log, gainXP, useSkill } = useStore();
 
   // État pour savoir qui attaquer
   const [target, setTarget] = useState(0); // Aucune cible sélectionnée au départ
@@ -31,79 +38,120 @@ function Homepage() {
 
   return (
     <main className="homepage">
-      <section className="game">
-        <img src={castle} className="castle" alt="" />
-        {/* Team Heroes */}
-
-        <section className="heroes">
-          {team_heroes.map((hero, index) => (
-            <div key={index}>
-              {hero.class === "Paladin" && <img src={paladins_1} alt="" />}
-              {hero.class === "Fire_Mage" && <img src={fire_mage} alt="" />}
-              <h2>{hero.name}</h2>
-              <p>Level : {hero.level}</p>
-              <p>
-                Xp : {hero.xp} / {hero.level * 100}
-              </p>
-              <p>
-                HP: {hero.health} / {hero.maxHealth}
-              </p>
-              <p>
-                Mana: {hero.mana} / {hero.maxMana}
-              </p>
-              <button onClick={() => handleGainXP("heroes", index, 120)}>
-                Gagner XP
-              </button>
-              {
-                hero.skills.map((skill, i) => (
-                  <button key={i} onClick={() => handleUseSkill("heroes",index, skill)}>
-                  {skill}
-                </button>
-                ))
-              }
-
+      <section className="container">
+        <section className="game">
+          <h2> Niveau 250</h2>
+          <section className="game__characters">
+            <div className="game__characters__heroes">
+              {team_heroes.map((hero, index) => (
+                <div key={index}>
+                  <h3>{hero.name}</h3>
+                  {hero.class === "Paladin" && <img src={paladins_1} alt="" />}
+                  {hero.class === "Fire_Mage" && <img src={fire_mage} alt="" />}
+                  <div className="game__characters__heroes__stats">
+                    <div className="bar__container">
+                      <div className="icon shield__icon">
+                        <img src={shield} alt="" />
+                        <p>250</p>
+                      </div>
+                      <div className="bar health__bar"></div>
+                    </div>
+                    <div className="bar__container">
+                      <div className="icon star__icon">
+                        <img src={star} alt="" />
+                        <p>250</p>
+                      </div>
+                      <div className="bar exp__bar"></div>
+                    </div>
+                    <div className="game__characters__heroes__status">
+                      <div className="game__characters__heroes__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                      <div className="game__characters__heroes__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                      <div className="game__characters__heroes__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                      <div className="game__characters__heroes__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+            <div className="game__characters__enemies">
+              {team_enemies.map((enemy, index) => (
+                <div key={index}>
+                  <h3>{enemy.name}</h3>
+                  {enemy.class === "Paladin" && <img src={paladins_1} alt="" />}
+                  {enemy.class === "Fire_Mage" && (
+                    <img src={fire_mage} alt="" />
+                  )}
+                  <div className="game__characters__enemies__stats">
+                    <div className="bar__container">
+                      <div className="icon shield__icon">
+                        <img src={shield} alt="" />
+                        <p>250</p>
+                      </div>
+                      <div className="bar health__bar"></div>
+                    </div>
+                    <div className="bar__container">
+                      <div className="icon star__icon">
+                        <img src={star} alt="" />
+                        <p>250</p>
+                      </div>
+                      <div className="bar exp__bar"></div>
+                    </div>
 
-          <div>
-            <h3>Choisissez une cible :</h3>
-            <button onClick={() => handleSelectTarget(0)}>Paladin 2</button>
-            <button onClick={() => handleSelectTarget(1)}>Mage 2</button>
-          </div>
-
-          {team_enemies.map((enemies, index) => (
-            <div key={index}>
-              {enemies.class === "Paladin" && <img src={paladins_2} alt="" />}
-              {enemies.class === "Fire_Mage" && <img src={fire_mage} className="reverse" alt="" />}
-              <h2>{enemies.name}</h2>
-              <p>Level : {enemies.level}</p>
-              <p>
-                HP: {enemies.health} / {enemies.maxHealth}
-              </p>
-              <p>
-                Mana: {enemies.mana} / {enemies.maxMana}
-              </p>
-              <button onClick={() => handleGainXP("enemies", index, 120)}>
-                Gagner XP
-              </button>
-              {
-                enemies.skills.map((skill, i) => (
-                  <button key={i} onClick={() => handleUseSkill("enemies", index, skill)}>
-                  {skill}
-                </button>
-                ))
-              }
+                    <div className="game__characters__enemies__status">
+                      <div className="game__characters__enemies__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                      <div className="game__characters__enemies__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                      <div className="game__characters__enemies__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                      <div className="game__characters__enemies__status__icon">
+                        <img src={fire} alt="" />
+                        <p>3</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </section>
         </section>
-      </section>
-      <section className="log">
-        <h2>Journal des Actions</h2>
-        <ul>
-          {log.slice(-4).map((entry, index) => (
-            <li key={index}>{entry}</li>
-          ))}
-        </ul>
+        <section className="action">
+          <div className="action__container action__main__menu">
+            <button> Attaque </button>
+            <button> Objets </button>
+            <button> Fuite </button>
+            <button> Abandon </button>
+          </div>
+          <div className="action__container action__secondary__menu">
+                  {team_heroes[0].skills.map((skill, i) => (
+                    <button key={i} onClick={() => handleUseSkill("heroes", 0, skill)}>
+                      {skill}
+                    </button>
+                  ))}
+          </div>
+          <div className="action__container action__description">
+            
+          Augmente votre armure de 30 pendant 3 tours
+          </div>
+        </section>
       </section>
     </main>
   );

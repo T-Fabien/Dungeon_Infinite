@@ -7,12 +7,18 @@ import Mage from "../classes/Mage";
 const useStore = create((set) => ({
   // Équipes
   team_heroes: [
-    new Mage("Mage 1"),
     new Paladin("Paladin 1"),
-  ],
-  team_enemies: [
+    new Mage("Mage 1"),
     new Paladin("Paladin 2"),
     new Mage("Mage 2"),
+    new Mage("Mage 3"),
+  ],
+  team_enemies: [
+    new Paladin("Paladin 1"),
+    new Mage("Mage 1"),
+    new Paladin("Paladin 2"),
+    new Mage("Mage 2"),
+    new Mage("Mage 3"),
   ],
   log: [],
 

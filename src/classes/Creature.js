@@ -4,7 +4,6 @@ export default class Creature {
     classType,
     level = 1,
     health = 100,
-    mana = 50,
     strength = 10,
     intelligence = 10,
     vitality = 10
@@ -14,9 +13,7 @@ export default class Creature {
     this.name = name; // Nom de la créature
     this.level = level; // Niveau
     this.health = health; // Points de vie actuels
-    this.mana = mana; // Points de mana actuels
     this.maxHealth = health; // Points de vie maximum
-    this.maxMana = mana; // Points de mana maximum
     this.xp = 0; // Expérience actuelle
     this.skills = ["Coup de base"]; // Compétences connues
     this.armor = 0; // Armure de base

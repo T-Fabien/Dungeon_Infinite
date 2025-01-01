@@ -4,11 +4,9 @@ export default class Mage {
     this.name = name;
     this.level = 1;
     this.health = 80;
-    this.mana = 120;
     this.xp = 0;
     this.skills = ["Boule de feu"];
     this.maxHealth = 80;
-    this.maxMana = 120;
   }
 
   gainXP(amount) {

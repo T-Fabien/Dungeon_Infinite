@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* Base */
 html,
 body,
@@ -66,7 +65,7 @@ header .title-link {
   color: #FFFFFF;
   display: flex;
   font-size: 1.5rem;
-  height: 70px;
+  height: 60px;
   text-decoration: none;
   z-index: 6;
 }
@@ -86,7 +85,7 @@ header .navbar .navbar__content a {
   color: #FFFFFF;
   display: flex;
   font-size: 1rem;
-  height: 70px;
+  height: 60px;
   padding: 0px 0.75rem;
   text-decoration: none;
   text-shadow: 1px 1px rgba(0, 0, 0, 0.35);
@@ -236,74 +235,172 @@ header .navbar .navbar__burger {
   }
 }
 /* Pages */
-section {
-  display: block;
-  width: 100vw; /* Assure que le conteneur prend toute la largeur */
-  height: 100vh; /* Assure que le conteneur prend toute la hauteur */
-}
-
-img {
-  width: 300px; /* Les images prendront toute la largeur disponible */
-  height: auto; /* L'aspect ratio est conservé */
-}
-
-.homepage {
-  max-height: 95vh; /* La hauteur de la homepage est limitée à 95% de la hauteur de la fenêtre */
-  width: 100vw; /* Utiliser toute la largeur de la fenêtre */
-  overflow: hidden; /* Pour éviter tout débordement */
+.container {
+  width: 95vw;
+  height: calc(100vh - 60px);
+  background-color: darksalmon;
 }
 
 .game {
-  display: block;
-  height: 90vh; /* La hauteur de la section game est de 50% de la hauteur de la fenêtre */
-  width: 100vw; /* Utilise toute la largeur */
+  background-color: rgb(49, 34, 18);
+  height: 70%;
 }
-
-.castle {
-  width: 100vw; /* Utiliser toute la largeur de la fenêtre */
-  height: 100%; /* Utiliser 90% de la hauteur de la fenêtre */
-  position: relative;
-  top: 0;
-  left: 0;
-  z-index: 1; /* Placer la castle en dessous */
-}
-
-.heroes {
+.game h2 {
+  color: gold;
   display: flex;
-  position: absolute;
-  top: 54vh; /* Positionnement relatif à .castle (54% de la hauteur de la fenêtre) */
-  left: 10vw; /* Positionnement relatif à .castle (10% de la largeur de la fenêtre) */
-  z-index: 2; /* Assurez-vous que .heroes est au-dessus de .castle */
-  width: 80vw;
-  height: -moz-fit-content;
-  height: fit-content;
+  justify-content: center;
+  padding-top: 3vh;
+  font-size: 2rem;
+  font-weight: 100;
 }
 
-.reverse {
-  transform: scale(-1, 1); /* Retourner l'image horizontalement */
-}
-
-.log {
+.game__characters {
   display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 100px;
-  width: 100vw; /* Utiliser toute la largeur */
-  height: 20vh;
-  z-index: 2; /* Placer le log au-dessus des autres éléments */
+  justify-content: space-between;
+  align-items: end;
+  width: 100%;
+  height: 85%;
+  padding-bottom: 20vh;
+}
+.game__characters img {
+  width: 100%;
+}
+.game__characters h3 {
   text-align: center;
 }
-
-.paladins {
-  /* Si vous souhaitez ajouter des styles supplémentaires pour cette classe, vous pouvez les ajouter ici */
+.game__characters__heroes {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.game__characters__enemies {
+  display: flex;
+}
+.game__characters__enemies img {
+  transform: scale(-1, 1);
+}
+.game__characters__heroes__status, .game__characters__enemies__status {
+  display: flex;
+  justify-content: space-around;
+  width: calc(85% - 10px);
+}
+.game__characters__heroes__status__icon, .game__characters__enemies__status__icon {
+  position: relative;
+}
+.game__characters__heroes__status__icon img, .game__characters__enemies__status__icon img {
+  width: 1.25rem;
+}
+.game__characters__heroes__status__icon p, .game__characters__enemies__status__icon p {
+  position: absolute;
+  bottom: 0;
+  right: -10px;
 }
 
-.paladins01 {
-  /* Styles pour paladins01 */
+.bar__container .shield__icon {
+  position: relative;
+}
+.bar__container .shield__icon img {
+  position: absolute;
+  top: -12.5px;
+  left: 0;
+  width: 35px;
+  z-index: 3;
+}
+.bar__container .shield__icon p {
+  position: absolute;
+  z-index: 4;
+  letter-spacing: -1px;
+  left: 5px;
+  top: -1px;
+}
+.bar__container .star__icon {
+  position: relative;
+}
+.bar__container .star__icon img {
+  position: absolute;
+  top: -12.5px;
+  left: 1rem;
+  width: 40px;
+  z-index: 3;
+}
+.bar__container .star__icon p {
+  color: black;
+  position: absolute;
+  z-index: 4;
+  letter-spacing: -1px;
+  left: 23px;
+  top: 1px;
 }
 
-.paladins02 {
-  /* Styles pour paladins02 */
+.bar__container {
+  position: relative;
+  height: 2rem;
+}
+.bar__container .bar {
+  height: 1.25rem;
+  border-radius: 2px;
+  margin-left: 1rem;
+}
+.bar__container .health__bar {
+  background-color: green;
+  height: 1.25rem;
+  width: 70%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.bar__container .exp__bar {
+  background-color: gold;
+  height: 1.25rem;
+  width: calc(70% - 2rem);
+  position: absolute;
+  top: 0;
+  left: 2rem;
+}
+
+.action {
+  background-color: rgb(30, 25, 0);
+  height: 30%;
+  display: flex;
+}
+.action__container {
+  background-color: #151515;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0 1rem 1rem;
+  padding: 1rem;
+}
+
+button {
+  background-color: inherit;
+  border: 1px solid gold;
+  border-radius: 2px;
+  color: gold;
+  font-size: 1.65rem;
+  padding: 0.15rem 0;
+  width: 80%;
+}
+
+.action__main__menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  min-width: 200px;
+}
+
+.action__secondary__menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  min-width: 300px;
+}
+
+.action__description {
+  width: 100%;
+  margin-right: 1rem;
+  color: gold;
+  font-size: 1.5rem;
 }
 
 body {
@@ -312,5 +409,5 @@ body {
 }
 
 main {
-  padding-top: 70px;
+  padding-top: 60px;
 }/*# sourceMappingURL=style.css.map */
