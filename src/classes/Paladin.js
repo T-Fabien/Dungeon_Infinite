@@ -48,9 +48,7 @@ export default class Paladin extends Creature {
       }
   
       case "Bouclier divin": {
-        if (this.mana >= 25) {
           const armorBuff = 20 + this.level * 5; // Armure augmentée en fonction du niveau
-          this.mana -= 25;
   
           this.addStatusEffect(
             new StatusEffect("Armure", armorBuff, 3, null, null)
@@ -58,9 +56,6 @@ export default class Paladin extends Creature {
           this.processStatusEffects(); // Réduit la durée des effets après l'attaque
           return `${this.name} utilise Bouclier divin, gagnant ${armorBuff} points d'armure pour 3 tours.`;
         }
-        return `${this.name} n'a pas assez de mana pour utiliser Bouclier divin.`;
-      }
-  
       default:
         return `${this.name} tente d'utiliser ${skillName}, mais cette compétence n'est pas implémentée.`;
     }

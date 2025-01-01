@@ -24,9 +24,7 @@ export default class Mage {
   levelUp() {
     this.xp -= this.xpToNextLevel();
     this.maxHealth += 10; // Augmente les PV max
-    this.maxMana += 20; // Augmente le mana max
     this.health = this.maxHealth; // Restaurer la santé
-    this.mana = this.maxMana; // Restaurer le mana
 
     this.level++;
 

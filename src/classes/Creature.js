@@ -48,9 +48,7 @@ export default class Creature {
     this.xp -= this.xpToNextLevel();
     this.level++;
     this.maxHealth += 20 + this.vitality * 2; // Augmentation basée sur la vitalité
-    this.maxMana += 10 + this.intelligence * 2;
     this.health = this.maxHealth; // Restaurer la santé
-    this.mana = this.maxMana; // Restaurer le mana
     console.log(`${this.name} passe au niveau ${this.level}!`);
   }
 
@@ -90,7 +88,6 @@ export default class Creature {
   displayStats() {
     console.log(`${this.name} [${this.class}] - Niveau ${this.level}`);
     console.log(`Santé : ${this.health}/${this.maxHealth}`);
-    console.log(`Mana : ${this.mana}/${this.maxMana}`);
     console.log(`Armure : ${this.armor}`);
     console.log(
       `Force : ${this.strength}, Intelligence : ${this.intelligence}, Vitalité : ${this.vitality}`
