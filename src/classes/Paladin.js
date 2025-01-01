@@ -14,6 +14,8 @@ export default class Paladin extends Creature {
   unlockSkill() {
     const skillMap = {
       2: "Jugement céleste",
+      3: "TEst",
+      4: "testee",
       5: "Frappe divine",
     };
     const newSkill = skillMap[this.level] || null;

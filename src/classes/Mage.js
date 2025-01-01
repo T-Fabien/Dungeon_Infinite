@@ -7,6 +7,7 @@ export default class Mage {
     this.xp = 0;
     this.skills = ["Boule de feu"];
     this.maxHealth = 80;
+    this.armor = 0;
   }
 
   gainXP(amount) {

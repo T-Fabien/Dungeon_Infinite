@@ -40,6 +40,8 @@
   }
   &__enemies {
     display: flex;
+    position: relative;
+    top: -32px;
     & img {
       transform: scale(-1, 1);
     }
@@ -79,8 +81,10 @@
       position: absolute;
       z-index: 4;
       letter-spacing: -1px;
-      left: 5px;
+      left: 6px;
       top: -1px;
+      width: 1.25rem;
+      text-align: center;
     }
   }
 
@@ -101,6 +105,8 @@
       letter-spacing: -1px;
       left: 23px;
       top: 1px;
+      text-align: center;
+      width: 1.25rem;
     }
   }
 }
@@ -112,22 +118,40 @@
     height: 1.25rem;
     border-radius: 2px;
     margin-left: 1rem;
+    background-color: #444;
+  }
+  .bar__text {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    text-align: center;
+    width: 100%;
   }
   .health__bar {
-    background-color: green;
     height: 1.25rem;
     width: 70%;
     position: absolute;
     top: 0;
     left: 0;
+    & .bar__fill {
+      height: 100%;
+      background-color: green;
+      transition: width 0.3s ease;
+    }
   }
+
   .exp__bar {
-    background-color: gold;
     height: 1.25rem;
     width: calc(70% - 2rem);
     position: absolute;
     top: 0;
     left: 2rem;
+    color: black;
+    & .bar__fill {
+      height: 100%;
+      background-color: gold;
+      transition: width 0.3s ease;
+    }
   }
 }
 
@@ -146,34 +170,35 @@
 }
 
 button {
-    background-color: inherit;
-    border: 1px solid gold;
-    border-radius: 2px;
-    color: gold;
-    font-size: 1.65rem;
-    padding: 0.15rem 0;
-    width: 80%;
+  background-color: inherit;
+  border: 1px solid gold;
+  border-radius: 2px;
+  color: gold;
+  font-size: 1.65rem;
+  padding: 0.15rem 0;
+  width: 80%;
+  cursor: pointer;
 }
 
-.action__main__menu{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    min-width: 200px;
+.action__main__menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  min-width: 200px;
 }
 
-.action__secondary__menu{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    min-width: 300px;
+.action__secondary__menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  min-width: 300px;
 }
 
-.action__description{
-    width: 100%;
-    margin-right: 1rem;
-    color: gold;
-    font-size: 1.5rem;
+.action__description {
+  width: 100%;
+  margin-right: 1rem;
+  color: gold;
+  font-size: 1.5rem;
 }
