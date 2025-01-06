@@ -32,7 +32,7 @@ export default class Skill {
       case "shield":
         if (target) {
           target.addStatusEffect(new StatusEffect(this.type, this.value, 3));
-          return `${caster.name} utilise ${this.name} sur ${target.name}, gagnant ${this.value} d'armure.`;
+          return `${caster.name} utilise ${this.name}, gagnant ${this.value} d'armure.`;
         }
     }
   }

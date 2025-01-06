@@ -11,6 +11,8 @@ function Homepage() {
   const [enemyTarget, setEnemyTarget] = useState(0); // Aucune cible sélectionnée au départ
   const [heroTarget, setHeroTarget] = useState(0); // Aucune cible sélectionnée au départ
   const [menu, setMenu] = useState("attack"); // Définis quel menu secondaire ouvrir
+  const [menuDescription, setMenuDescription] = useState(true); // Définis quel menu secondaire ouvrir
+
   const [hoveredSkillDescription, setHoveredSkillDescription] = useState(""); // Description de la compétence survolée
 
   // Gérer les actions pour Paladin 1 et Mage 1
@@ -30,10 +32,15 @@ function Homepage() {
 
   const handleSelectHeroTarget = (targetIndex) => {
     setHeroTarget(targetIndex);
+    console.log(menuDescription);
   };
 
   const handleSecondaryMenu = (menu) => {
     setMenu(menu);
+  };
+
+  const handleMenuDescription = () => {
+    setMenuDescription(!menuDescription);
   };
 
   return (
@@ -84,9 +91,15 @@ function Homepage() {
               team_heroes[heroTarget].skills.map((skill, i) => (
                 <button
                   key={i}
-                  onClick={() => handleUseSkill("heroes", heroTarget, skill)}
+                  onClick={() => {
+                    handleUseSkill("heroes", heroTarget, skill);
+                    setMenuDescription(!menuDescription);
+                  }}
                   onMouseEnter={() =>
+                  {
                     setHoveredSkillDescription(skill.description)
+                    setMenuDescription(true);
+                  }
                   }
                 >
                   {skill.name}
@@ -99,9 +112,9 @@ function Homepage() {
             ) : null}
           </div>
           <div className="action__container action__description">
-            {menu === "attack" && hoveredSkillDescription}
-            {menu === "object" &&
-              log.slice(-8).map((msg, i) => <p key={i}> {msg}</p>)}
+            { menuDescription
+              ? hoveredSkillDescription
+              : log.slice(-8).map((msg, i) => <p key={i}> {msg}</p>)}
           </div>
         </section>
       </section>
