@@ -7,7 +7,7 @@ import Mage from "../classes/Mage";
 const useStore = create((set) => ({
   // Équipes
   team_heroes: [
-    new Paladin("Paladin 1"),
+    new Paladin("Paladin 1", 10),
     new Mage("Mage 1"),
     new Paladin("Paladin 2"),
     new Mage("Mage 2"),
@@ -48,6 +48,7 @@ const useStore = create((set) => ({
 
   // Utiliser une compétence
   useSkill: (team, heroIndex, skillName, targetIndex = null) => {
+
     set((state) => {
       const sourceTeam = team === "heroes" ? state.team_heroes : state.team_enemies;
       const targetTeam = team === "heroes" ? state.team_enemies : state.team_heroes;
@@ -66,7 +67,7 @@ const useStore = create((set) => ({
       }
 
       // Effectuer l'action en fonction de la compétence
-      const logMessage = sourceHero.useSkill(skillName, targetHero);
+      const logMessage = sourceHero.useSkill(sourceHero, skillName, targetHero);
 
       // Mettre à jour les états
       return {

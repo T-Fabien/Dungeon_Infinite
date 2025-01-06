@@ -11,11 +11,11 @@ import fire from "../assets/statut/fire.png";
 import shield from "../assets/shield.png";
 import star from "../assets/star.png";
 
-function Character({ characterTeamArray, team }) {
+function Character({ character, team }) {
+
+  
   return (
-    <div className={`game__characters__${team}`}>
-      {characterTeamArray.map((character, index) => (
-        <div key={index}>
+        <>
           <h3>{character.name}</h3>
           {character.class === "Paladin" && <img src={paladins_1} alt="" />}
           {character.class === "Fire_Mage" && <img src={fire_mage} alt="" />}
@@ -83,15 +83,13 @@ function Character({ characterTeamArray, team }) {
               </div>
             </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
+        </>
+      )
 }
 
 // Validation des props
 Character.propTypes = {
-  characterTeamArray: PropTypes.array.isRequired,
+  character: PropTypes.object.isRequired,
   team: PropTypes.string.isRequired,
 };
 

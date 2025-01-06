@@ -8,26 +8,31 @@ function Homepage() {
   const { team_heroes, team_enemies, log, gainXP, useSkill } = useStore();
 
   // État pour savoir qui attaquer
-  const [target, setTarget] = useState(0); // Aucune cible sélectionnée au départ
-  const [menu, setMenu] = useState(null); // Définis quel menu secondaire ouvrir
+  const [enemyTarget, setEnemyTarget] = useState(0); // Aucune cible sélectionnée au départ
+  const [heroTarget, setHeroTarget] = useState(0); // Aucune cible sélectionnée au départ
+  const [menu, setMenu] = useState("attack"); // Définis quel menu secondaire ouvrir
+  const [hoveredSkillDescription, setHoveredSkillDescription] = useState(""); // Description de la compétence survolée
 
   // Gérer les actions pour Paladin 1 et Mage 1
   const handleGainXP = (team, heroIndex, amount) => {
-    gainXP(team, heroIndex, amount); // Gagner de l'XP pour Paladin 1
+    gainXP(team, heroIndex, amount);
   };
 
   const handleUseSkill = (team, heroIndex, skill) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useSkill(team, heroIndex, skill, target); // Mage 1 utilise "Boule de feu" sur la cible
+    useSkill(team, heroIndex, skill, enemyTarget);
+    team_heroes[heroTarget].availableplay = false;
   };
 
-  const handleSelectTarget = (targetIndex) => {
-    // Mettre à jour la cible sélectionnée (Paladin 2 ou Mage 2)
-    setTarget(targetIndex);
+  const handleSelectEnemyTarget = (targetIndex) => {
+    setEnemyTarget(targetIndex);
+  };
+
+  const handleSelectHeroTarget = (targetIndex) => {
+    setHeroTarget(targetIndex);
   };
 
   const handleSecondaryMenu = (menu) => {
-    // Mettre à jour la cible sélectionnée (Paladin 2 ou Mage 2)
     setMenu(menu);
   };
 
@@ -37,40 +42,64 @@ function Homepage() {
         <section className="game">
           <h2> Niveau 250</h2>
           <section className="game__characters">
-            <Character characterTeamArray={team_heroes} team="heroes" />
-            <Character characterTeamArray={team_enemies} team="enemies" />
+            <div className="game__characters__heroes">
+              {team_heroes.map((hero, i) => (
+                <button key={i} onClick={() => handleSelectHeroTarget(i)}>
+                  <Character character={hero} team="heroes" />
+                </button>
+              ))}
+            </div>
+            <div className="game__characters__enemies">
+              {team_enemies.map((ennemy, i) => (
+                <button key={i} onClick={() => handleSelectEnemyTarget(i)}>
+                  <Character key={i} character={ennemy} team="enemies" />
+                </button>
+              ))}
+            </div>
           </section>
         </section>
         <section className="action">
           <div className="action__container action__main__menu">
-            <button onClick={() => handleSecondaryMenu("attack")}>
-              Attaque
-            </button>
+            {team_heroes[heroTarget].availableplay === true ? (
+              <button onClick={() => handleSecondaryMenu("attack")}>
+                Attaque
+              </button>
+            ) : (
+              <button
+                onClick={() => handleSecondaryMenu("attack")}
+                className="unclickable"
+              >
+                Attaque
+              </button>
+            )}
             <button onClick={() => handleSecondaryMenu("object")}>
               Objets
             </button>
-            <button onClick={() => handleSecondaryMenu(null)}> Fuite </button>
-            <button onClick={() => handleSecondaryMenu(null)}> Abandon </button>
+            <button onClick={() => handleSecondaryMenu("")}> Fuite </button>
+            <button onClick={() => handleSecondaryMenu("")}> Abandon </button>
           </div>
           <div className="action__container action__secondary__menu">
             {menu === "attack" &&
-              team_heroes[0].skills.map((skill, i) => (
+            team_heroes[heroTarget].availableplay === true ? (
+              team_heroes[heroTarget].skills.map((skill, i) => (
                 <button
                   key={i}
-                  onClick={() => handleUseSkill("heroes", 0, skill)}
+                  onClick={() => handleUseSkill("heroes", heroTarget, skill)}
+                  onMouseEnter={() =>
+                    setHoveredSkillDescription(skill.description)
+                  }
                 >
-                  {skill}
+                  {skill.name}
                 </button>
-              ))}
-
-            {menu === "object" &&
-              team_heroes.map((hero, i) => (
-                <button key={i} onClick={() => handleGainXP("heroes", i, 100)}>
-                  + 100 XP
-                </button>
-              ))}
+              ))
+            ) : menu === "object" ? (
+              <button onClick={() => handleGainXP("heroes", heroTarget, 100)}>
+                + 100 XP
+              </button>
+            ) : null}
           </div>
           <div className="action__container action__description">
+            {menu === "attack" && hoveredSkillDescription}
             {menu === "object" &&
               log.slice(-8).map((msg, i) => <p key={i}> {msg}</p>)}
           </div>

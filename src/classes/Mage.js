@@ -1,12 +1,13 @@
-export default class Mage {
+import Creature from "./Creature";
+import Skill from "./Skill";
+
+export default class Mage extends Creature {
   constructor(name) {
-    this.class = "Fire_Mage";
-    this.name = name;
-    this.level = 1;
-    this.health = 80;
-    this.xp = 0;
-    this.skills = ["Boule de feu"];
-    this.maxHealth = 80;
+    super(name, "Fire_Mage"); // Appel au constructeur de la classe parent
+    this.maxhealth = 80;
+    this.skills = [
+      new Skill("Boule de Feu", "Envoie une boule feu", 40, "damage"),
+    ];
     this.armor = 0;
   }
 
@@ -30,28 +31,22 @@ export default class Mage {
 
     console.log(`${this.name} passe au niveau ${this.level}!`);
   }
+  // Utiliser une compétence
+  useSkill(sourceTarget, skillName, targetHero) {
 
-  useSkill(skillName, target) {
-    if (!this.skills.includes(skillName)) {
-      console.log(`${this.name} ne connaît pas cette compétence.`);
-      return;
+    const skill = this.skills.find((s) => s.name === skillName.name);
+    if (!skill) {
+      return `${this.name} tente d'utiliser ${skillName}, mais cette compétence n'existe pas.`;
     }
 
-    switch (skillName) {
-      case "Boule de feu":
-        console.log(`${this.name} utilise Boule de feu sur ${target.name}!`);
-        target.takeDamage(30); // Inflige des dégâts au target
-        break;
-      default:
-        console.log(`Compétence ${skillName} non implémentée.`);
+    let result ; 
+    if (skill.type !== "damage") {
+      result = skill.execute(this, sourceTarget); // Appelle la logique dans la classe `Skill`
     }
-  }
-
-  takeDamage(amount) {
-    this.health -= amount;
-    console.log(`${this.name} subit ${amount} points de dégâts.`);
-    if (this.health <= 0) {
-      console.log(`${this.name} est vaincu.`);
+    else {
+      result = skill.execute(this, targetHero)
     }
+    this.processStatusEffects(); // Réduit la durée des effets après l'utilisation
+    return result;
   }
 }

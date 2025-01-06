@@ -19,6 +19,7 @@ export default class Creature {
     this.armor = 0; // Armure de base
     this.activeArmor = 0; // Armure active (qui inclut les effets temporaires)
     this.statusEffects = []; // Liste des effets de statut actifs
+    this.availableplay = true; // Disponibilité pour jouer
 
     // Stats principales
     this.strength = strength; // Force
@@ -26,7 +27,6 @@ export default class Creature {
     this.vitality = vitality; // Vitalité
 
     // Propriétés pour le futur
-    this.allSkills = []; // Liste complète des compétences débloquables (future feature)
     this.items = []; // Inventaire des objets (future feature)
   }
 
@@ -76,12 +76,10 @@ export default class Creature {
     const totalArmor = this.armor + this.activeArmor; // Ajouter l'armure active à l'armure de base
     const effectiveDamage = Math.max(0, amount - totalArmor); // Réduction des dégâts par l'armure active
     this.health -= effectiveDamage;
-    console.log(
-      `${this.name} subit ${effectiveDamage} points de dégâts (réduction d'armure : ${totalArmor}).`
-    );
-    if (this.health <= 0) {
-      console.log(`${this.name} est vaincu.`);
-    }
+  }
+  
+  heal(amount) {
+    this.health = Math.min(this.maxHealth, this.health + amount);
   }
 
   // Afficher les statistiques

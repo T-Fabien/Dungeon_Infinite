@@ -1,27 +1,28 @@
 import Creature from "./Creature";
-import StatusEffect from "./StatusEffect";
-
+import Skill from "./Skill";
 export default class Paladin extends Creature {
-  constructor(name) {
-    super(name, "Paladin", 1); // Appel au constructeur de la classe parent
-    this.health = 120; // Les paladins commencent avec plus de santé
+  constructor(name, health = 120) {
+    super(name, "Paladin"); // Appel au constructeur de la classe parent
+    this.health = health; // Les paladins commencent avec plus de santé
     this.maxHealth = 120;
-    this.skills = ["Coup de base", "Lumière sacrée", "Bouclier divin"];
+    this.skills = [
+      new Skill("Coup de base", "Donne un coup d'épée", 30, "damage"),
+      new Skill("Lumière sacrée", "On sait pas", 20, "heal"),
+      new Skill("Bouclier divin", "Se donne 30 de shield pendant 3 tour", 30, "shield"),
+    ];
     this.armor = 10; // Le Paladin commence avec de l'armure
   }
 
   // Vérifier et débloquer des compétences
   unlockSkill() {
     const skillMap = {
-      2: "Jugement céleste",
-      3: "TEst",
-      4: "testee",
-      5: "Frappe divine",
+      2: new Skill("Jugement Céleste", "Se donne 30 de shield pendant 3 tour", 30, "damage"),
+      5: new Skill("Frappe Divine", "Se donne 30 de shield pendant 3 tour", 30, "damage"),
     };
     const newSkill = skillMap[this.level] || null;
     if (newSkill) {
       this.skills.push(newSkill);
-      console.log(`${this.name} débloque la compétence : ${newSkill}`);
+      console.log(`${this.name} débloque la compétence : ${newSkill.name}`);
     }
   }
 
@@ -33,35 +34,21 @@ export default class Paladin extends Creature {
   }
 
   // Utiliser une compétence
-  useSkill(skillName, target) {
-    switch (skillName) {
-      case "Coup de base": {
-        const damage = 10 + this.strength * 2; // Force x2 comme dégâts de base
-        const damageWithReduction = Math.max(0, damage - (target.armor + target.activeArmor));; // Réduit les dégâts par l'armure
-        
-        if (target) {
-          target.takeDamage(damage);
-          this.processStatusEffects(); // Réduit la durée des effets après l'attaque
-          return `${this.name} attaque ${target.name}, infligeant ${damageWithReduction} dégâts(réduction d'armure : ${target.armor + target.activeArmor}).`;
-        }
-        return `${this.name} ne peut pas attaquer sans cible.`;
-      }
-  
-      case "Bouclier divin": {
-          const armorBuff = 20 + this.level * 5; // Armure augmentée en fonction du niveau
-  
-          this.addStatusEffect(
-            new StatusEffect("Armure", armorBuff, 3, null, null)
-          );
-          this.processStatusEffects(); // Réduit la durée des effets après l'attaque
-          return `${this.name} utilise Bouclier divin, gagnant ${armorBuff} points d'armure pour 3 tours.`;
-        }
-      default:
-        return `${this.name} tente d'utiliser ${skillName}, mais cette compétence n'est pas implémentée.`;
+  useSkill(sourceTarget, skillName, targetHero) {
+
+    const skill = this.skills.find((s) => s.name === skillName.name);
+    if (!skill) {
+      return `${this.name} tente d'utiliser ${skillName}, mais cette compétence n'existe pas.`;
     }
+
+    let result ; 
+    if (skill.type !== "damage") {
+      result = skill.execute(this, sourceTarget); // Appelle la logique dans la classe `Skill`
+    }
+    else {
+      result = skill.execute(this, targetHero)
+    }
+    this.processStatusEffects(); // Réduit la durée des effets après l'utilisation
+    return result;
   }
-  
-  
-  
-  
 }

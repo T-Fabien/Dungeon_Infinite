@@ -275,6 +275,16 @@ header .navbar .navbar__burger {
 .game__characters h3 {
   text-align: center;
 }
+.game__characters button {
+  background-color: inherit;
+  border: none;
+  border-radius: 0;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+}
 .game__characters__heroes {
   display: flex;
   flex-direction: row-reverse;
@@ -409,6 +419,11 @@ button {
   padding: 0.15rem 0;
   width: 80%;
   cursor: pointer;
+}
+
+.unclickable {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .action__main__menu {
