@@ -9,7 +9,6 @@ function Homepage() {
   const {
     team_heroes,
     team_enemies,
-    incrementTurn,
     wave,
     log,
     gainXP,
@@ -113,7 +112,6 @@ function Homepage() {
         const targetHeroIndex = Math.floor(Math.random() * aliveHeroes.length); // Choisir un héros aléatoire parmi les héros vivants
         const randomSkillIndex = Math.floor(Math.random() * enemy.skills.length); // Choisir une compétence aléatoire
         const skillToUse = enemy.skills[randomSkillIndex]; // Faire attaquer l'ennemi (ici on suppose que l'ennemi a une méthode "attack")
-        console.log(enemy.level);
         useSkill("enemies", enemyIndex, skillToUse, targetHeroIndex);
       }
     });
