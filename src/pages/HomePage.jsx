@@ -75,7 +75,7 @@ function Homepage() {
       setHeroTarget(heroTarget + 1);
     }
 
-    if (team_heroes.every(hero => !hero.availableplay)) {
+    if (team_heroes.every((hero) => !hero.availableplay)) {
       handleEndTurn();
     }
   };
@@ -95,16 +95,20 @@ function Homepage() {
   };
 
   const handleEndTurn = () => {
+    // Effet des Statut (dégat de feu ect ..)
+
+    // Supprime les morts et fait jouer l'IA
+    removeDeadEnemies();
+    handleEnemyAI();
+
+    // Réatribution de la possibilité d'attaquer
     for (let i = 0; i < team_heroes.length; i++) {
       team_heroes[i].availableplay = true;
     }
 
-    // Met le menu attaque et selectionne le 1er hero
-    setMenu("attack");
-    handleSelectHeroTarget(0);
-    setMenuDescription(false);
-    removeDeadEnemies();
-    handleEnemyAI();
+    // Selectionne le 1er hero
+      handleSelectHeroTarget(0);
+      setMenuDescription(false);
   };
 
   // Tour de l'ennemis
@@ -112,9 +116,11 @@ function Homepage() {
     team_enemies.forEach((enemy, enemyIndex) => {
       // Si l'ennemi est vivant et peut jouer
       if (enemy.health > 0) {
-        const aliveHeroes = team_heroes.filter(hero => hero.health > 0); // Filtrer les héros vivants
+        const aliveHeroes = team_heroes.filter((hero) => hero.health > 0); // Filtrer les héros vivants
         const targetHeroIndex = Math.floor(Math.random() * aliveHeroes.length); // Choisir un héros aléatoire parmi les héros vivants
-        const randomSkillIndex = Math.floor(Math.random() * enemy.skills.length); // Choisir une compétence aléatoire
+        const randomSkillIndex = Math.floor(
+          Math.random() * enemy.skills.length
+        ); // Choisir une compétence aléatoire
         const skillToUse = enemy.skills[randomSkillIndex]; // Faire attaquer l'ennemi (ici on suppose que l'ennemi a une méthode "attack")
         useSkill("enemies", enemyIndex, skillToUse, targetHeroIndex);
       }
@@ -195,8 +201,7 @@ function Homepage() {
                 handleEndTurn();
               }}
             >
-              {" "}
-              Fin du tour{" "}
+              Fin du tour
             </button>
             <button onClick={() => handleSecondaryMenu("")}> Abandon </button>
           </div>

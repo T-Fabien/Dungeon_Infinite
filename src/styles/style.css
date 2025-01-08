@@ -381,7 +381,7 @@ header .navbar .navbar__burger {
 .bar__container .health__bar .bar__fill {
   height: 100%;
   background-color: green;
-  transition: width 0.3s ease;
+  transition: width 0.7s ease;
 }
 .bar__container .exp__bar {
   height: 1.25rem;
