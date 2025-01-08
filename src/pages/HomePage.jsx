@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useEffect } from "react";
 import useStore from "../store/useStore"; // Importer le store
 
@@ -9,7 +10,6 @@ function Homepage() {
     team_heroes,
     team_enemies,
     incrementTurn,
-    turn,
     wave,
     log,
     gainXP,
@@ -32,26 +32,47 @@ function Homepage() {
   };
 
   const handleUseSkill = (team, heroIndex, skill) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useSkill(team, heroIndex, skill, enemyTarget);
-
     // Gestion de l'xp
-    if(skill.type == "damage"){
-      if(team_enemies[enemyTarget].health <= 0){
-        gainXP("heroes", heroIndex, skill.value);
+    // Dégâts
+    if (skill.type == "damage") {
+      if (team_enemies[enemyTarget].health - skill.value < 0) {
+        gainXP(
+          "heroes",
+          heroIndex,
+          Math.max(
+            team_enemies[enemyTarget].health - skill.value,
+            team_enemies[enemyTarget].health
+          )
+        );
         gainXP("heroes", heroIndex, 100);
-      }
-      else {
+      } else if (team_enemies[enemyTarget].health - skill.value == 0) {
+        gainXP("heroes", heroIndex, skill.value + 100);
+      } else {
         gainXP("heroes", heroIndex, skill.value);
       }
-    } else if (skill.type == "heal"){
-      gainXP("heroes", heroIndex, skill.value);
+      // Soin
+    } else if (skill.type == "heal") {
+      let healthDiff =
+        team_heroes[heroTarget].maxHealth - team_heroes[heroTarget].health;
+      if (healthDiff > 0) {
+        if (
+          team_heroes[heroTarget].health + skill.value >
+          team_heroes[heroTarget].maxHealth
+        ) {
+          gainXP(
+            "heroes",
+            heroIndex,
+            team_heroes[heroTarget].maxHealth - team_heroes[heroTarget].health
+          );
+        } else {
+          gainXP("heroes", heroIndex, skill.value);
+        }
+      }
     }
-
+    useSkill(team, heroIndex, skill, enemyTarget);
     removeDeadEnemies();
     team_heroes[heroTarget].availableplay = false;
-
-    if(heroTarget < team_heroes.length - 1) {
+    if (heroTarget < team_heroes.length - 1) {
       setHeroTarget(heroTarget + 1);
     }
   };
@@ -60,19 +81,17 @@ function Homepage() {
     setEnemyTarget(targetIndex);
     setMenuDescription(false);
   };
-  
+
   const handleSelectHeroTarget = (targetIndex) => {
     setHeroTarget(targetIndex);
     setMenuDescription(true);
   };
-  
 
   const handleSecondaryMenu = (menu) => {
     setMenu(menu);
   };
 
   const handleEndTurn = () => {
-    incrementTurn();
     for (let i = 0; i < team_heroes.length; i++) {
       team_heroes[i].availableplay = true;
     }
@@ -82,24 +101,38 @@ function Homepage() {
     handleSelectHeroTarget(0);
     setMenuDescription(false);
     removeDeadEnemies();
+    handleEnemyAI();
   };
 
+  // Tour de l'ennemis
+  const handleEnemyAI = () => {
+    team_enemies.forEach((enemy, enemyIndex) => {
+      // Si l'ennemi est vivant et peut jouer
+      if (enemy.health > 0) {
+        const aliveHeroes = team_heroes.filter(hero => hero.health > 0); // Filtrer les héros vivants
+        const targetHeroIndex = Math.floor(Math.random() * aliveHeroes.length); // Choisir un héros aléatoire parmi les héros vivants
+        const randomSkillIndex = Math.floor(Math.random() * enemy.skills.length); // Choisir une compétence aléatoire
+        const skillToUse = enemy.skills[randomSkillIndex]; // Faire attaquer l'ennemi (ici on suppose que l'ennemi a une méthode "attack")
+        console.log(enemy.level);
+        useSkill("enemies", enemyIndex, skillToUse, targetHeroIndex);
+      }
+    });
+  };
 
   // Vérifier si tous les ennemis sont morts
-useEffect(() => {
-  // Vérifier si tous les ennemis sont morts
-  if (!team_enemies.some(enemy => enemy.health > 0)) {
-    handleEndTurn(); // Fin du tour si tous les ennemis sont morts
-    spawnEnemies(); // Appeler spawnEnemies après le rendu
-  }
-}, [team_enemies, spawnEnemies]); // Dépendances: appel uniquement quand team_enemies change
- 
+  useEffect(() => {
+    // Vérifier si tous les ennemis sont morts
+    if (!team_enemies.some((enemy) => enemy.health > 0)) {
+      handleEndTurn(); // Fin du tour si tous les ennemis sont morts
+      spawnEnemies(); // Appeler spawnEnemies après le rendu
+    }
+  }, [team_enemies, spawnEnemies]); // Dépendances: appel uniquement quand team_enemies change
+
   return (
     <main className="homepage">
       <section className="container">
         <section className="game">
           <div>
-            <p>Tour : {turn} </p>
             <h2> Niveau {wave} </h2>
           </div>
 
@@ -109,7 +142,9 @@ useEffect(() => {
                 <button
                   key={i}
                   onClick={() => handleSelectHeroTarget(i)}
-                  className={`heroes__card ${heroTarget === i ? 'selected' : ''}`}
+                  className={`heroes__card ${
+                    heroTarget === i ? "selected" : ""
+                  }`}
                 >
                   <Character character={hero} team="heroes" />
                 </button>
@@ -120,7 +155,9 @@ useEffect(() => {
                 <button
                   key={i}
                   onClick={() => handleSelectEnemyTarget(i)}
-                  className={`enemies__card ${enemyTarget === i ? 'selected' : ''}`}
+                  className={`enemies__card ${
+                    enemyTarget === i ? "selected" : ""
+                  }`}
                 >
                   <Character key={i} character={ennemy} team="enemies" />
                 </button>

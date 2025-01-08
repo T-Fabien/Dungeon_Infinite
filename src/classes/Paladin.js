@@ -1,13 +1,13 @@
 import Creature from "./Creature";
 import Skill from "./Skill";
 export default class Paladin extends Creature {
-  constructor(name, maxHealth = 120) {
+  constructor(name, level, maxHealth = 120) {
     super(name, "Paladin"); // Appel au constructeur de la classe parent
     this.health = maxHealth;
     this.maxHealth = maxHealth;
     this.skills = [
       new Skill("Coup de base", "Donne un coup d'épée", 30, "damage"),
-      new Skill("Lumière sacrée", "On sait pas", 20, "heal"),
+      new Skill("Lumière sacrée", "Se soigne de 20 point de vie", 20, "heal"),
       new Skill("Bouclier divin", "Se donne 30 de shield pendant 3 tour", 30, "shield"),
     ];
     this.armor = 10; // Le Paladin commence avec de l'armure
@@ -16,13 +16,12 @@ export default class Paladin extends Creature {
   // Vérifier et débloquer des compétences
   unlockSkill() {
     const skillMap = {
-      2: new Skill("Jugement Céleste", "Donne un coup d'épée", 30, "damage"),
-      5: new Skill("Frappe Divine", "Donne un coup d'épée", 30, "damage"),
+      2: new Skill("Jugement Céleste", "Donne un coup d'épée magique", 40, "damage"),
+      5: new Skill("Frappe Divine", "Donne un coup d'épée divin", 50, "damage"),
     };
     const newSkill = skillMap[this.level] || null;
     if (newSkill) {
       this.skills.push(newSkill);
-      console.log(`${this.name} débloque la compétence : ${newSkill.name}`);
     }
   }
 

@@ -6,9 +6,9 @@ import Mage from "../classes/Mage";
 
 // Boss par vague
 const bossWaves = {
-  5: new Paladin("Boss Paladin", 300),
-  10: new Mage("Boss Mage", 250),
-  20: new Paladin("Mega Boss", 500),
+  10: new Mage("Boss Paladin", 200),
+  20: new Paladin("Boss Mage", 300),
+  30: new Paladin("Mega Boss", 500),
 };
 
 const useStore = create((set) => ({
@@ -21,22 +21,10 @@ const useStore = create((set) => ({
     new Mage("Mage 3"),
   ],
   team_enemies: [
-    new Paladin("Paladin 1", 10),
-    // new Mage("Mage 1"),
-    new Paladin("Paladin 2", 10),
-    // new Mage("Mage 2"),
-    // new Mage("Mage 3"),
+    new Mage("Mage 1"),
   ],
-  turn: 1,
   wave: 1,
   log: [],
-
-  // Incrémenter le tour
-  incrementTurn: () => {
-    set((state) => ({
-      turn: state.turn + 1,
-    }));
-  },
 
   // Gagner de l'expérience
   gainXP: (team, heroIndex, amount) => {
@@ -142,7 +130,7 @@ const useStore = create((set) => ({
         // Gérer les vagues de 0 à 10 (uniquement des Mages)
         if (currentWave <= 10) {
           for (let i = 0; i < enemyCount; i++) {
-            newEnemies.push(new Mage(`Mage ${i + 1}`, 100 + currentWave * 5));
+            newEnemies.push(new Mage(`Mage Enemy : ${i + 1}`, Math.floor(currentWave / 10) + 1 ,100 + currentWave * 5));
           }
         }
   

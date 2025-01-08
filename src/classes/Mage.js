@@ -2,35 +2,38 @@ import Creature from "./Creature";
 import Skill from "./Skill";
 
 export default class Mage extends Creature {
-  constructor(name, maxHealth = 80) {
-    super(name, "Fire_Mage"); // Appel au constructeur de la classe parent
+  constructor(name, level, maxHealth = 80) {
+    super(name, "Fire_Mage", level); // Appel au constructeur de la classe parent
     this.health = maxHealth;
     this.maxHealth = maxHealth;
     this.skills = [
       new Skill("Boule de Feu", "Envoie une boule feu", 40, "damage"),
     ];
     this.armor = 0;
+
+    // Vérifier et débloquer des compétences
+    this.unlockSkill();
   }
 
-  gainXP(amount) {
-    this.xp += amount;
-    while (this.xp >= this.xpToNextLevel()) {
-      this.levelUp();
+  // Vérifier et débloquer des compétences
+  unlockSkill() {
+    const skillMap = {
+      2: new Skill("Mur de Feu", "Envoie un mur de feu", 50, "damage"),
+      5: new Skill("Météorite", "Envoie une météorite de feu", 80, "damage"),
+    };
+    
+    // Vérifier pour chaque niveau jusqu'à celui du mage
+    for (let i = 2; i <= this.level; i++) {
+      if (skillMap[i] && !this.skills.some(skill => skill.name === skillMap[i].name)) {
+        this.skills.push(skillMap[i]);
+      }
     }
   }
 
-  xpToNextLevel() {
-    return this.level * 100; // Par exemple : 100 XP par niveau
-  }
-
   levelUp() {
-    this.xp -= this.xpToNextLevel();
-    this.maxHealth += 10; // Augmente les PV max
-    this.health = this.maxHealth; // Restaurer la santé
-
-    this.level++;
-
-    console.log(`${this.name} passe au niveau ${this.level}!`);
+    super.levelUp();
+    this.armor += 5; // Bonus spécifique au Mage
+    this.unlockSkill();
   }
   // Utiliser une compétence
   useSkill(sourceTarget, skillName, targetHero) {

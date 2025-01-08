@@ -58,9 +58,10 @@ export default class Creature {
       effect.onApply(this); // Appliquer immédiatement l'effet si nécessaire
     }
     this.statusEffects.push(effect);
-    console.log(`${this.name} est affecté par ${effect.type} pour ${effect.duration} tours.`);
+    console.log(
+      `${this.name} est affecté par ${effect.type} pour ${effect.duration} tours.`
+    );
   }
-  
 
   // Réduire la durée des effets après chaque action
   processStatusEffects() {
@@ -69,15 +70,29 @@ export default class Creature {
       return effect.reduceDuration(this); // Réduire la durée et retirer si nécessaire
     });
   }
-  
 
   // Subir des dégâts
   takeDamage(amount) {
-    const totalArmor = this.armor + this.activeArmor; // Ajouter l'armure active à l'armure de base
-    const effectiveDamage = Math.max(0, amount - totalArmor); // Réduction des dégâts par l'armure active
-    this.health -= effectiveDamage;
+    let remainDamage = amount;
+
+    if (this.activeArmor < 0) {
+      remainDamage = remainDamage - this.activeArmor;
+      this.activeArmor = Math.max(0, this.activeArmor - amount);
+    }
+
+    if (this.armor > 0 && remainDamage > 0) {
+      if (this.armor > remainDamage) {
+        this.armor = Math.max(0, this.armor - remainDamage);
+        remainDamage = 0;
+      } else {
+        remainDamage = remainDamage - this.armor;
+        this.armor = 0;
+      }
+    }
+
+    this.health -= remainDamage;
   }
-  
+
   heal(amount) {
     this.health = Math.min(this.maxHealth, this.health + amount);
   }
