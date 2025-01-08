@@ -74,6 +74,10 @@ function Homepage() {
     if (heroTarget < team_heroes.length - 1) {
       setHeroTarget(heroTarget + 1);
     }
+
+    if (team_heroes.every(hero => !hero.availableplay)) {
+      handleEndTurn();
+    }
   };
 
   const handleSelectEnemyTarget = (targetIndex) => {

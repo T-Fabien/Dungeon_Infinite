@@ -21,7 +21,7 @@ const useStore = create((set) => ({
     new Mage("Mage 3"),
   ],
   team_enemies: [
-    new Mage("Mage 1"),
+    new Mage("Mage 1", 1 , 200),
   ],
   wave: 1,
   log: [],
