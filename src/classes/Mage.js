@@ -2,9 +2,10 @@ import Creature from "./Creature";
 import Skill from "./Skill";
 
 export default class Mage extends Creature {
-  constructor(name) {
+  constructor(name, maxHealth = 80) {
     super(name, "Fire_Mage"); // Appel au constructeur de la classe parent
-    this.maxhealth = 80;
+    this.health = maxHealth;
+    this.maxHealth = maxHealth;
     this.skills = [
       new Skill("Boule de Feu", "Envoie une boule feu", 40, "damage"),
     ];

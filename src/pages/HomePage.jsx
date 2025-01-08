@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useStore from "../store/useStore"; // Importer le store
 
 // Components
 import Character from "../components/Character";
 
 function Homepage() {
-  const { team_heroes, team_enemies, log, gainXP, useSkill } = useStore();
+  const {
+    team_heroes,
+    team_enemies,
+    incrementTurn,
+    turn,
+    wave,
+    log,
+    gainXP,
+    useSkill,
+    spawnEnemies,
+    removeDeadEnemies,
+  } = useStore();
 
   // État pour savoir qui attaquer
   const [enemyTarget, setEnemyTarget] = useState(0); // Aucune cible sélectionnée au départ
@@ -23,42 +34,94 @@ function Homepage() {
   const handleUseSkill = (team, heroIndex, skill) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useSkill(team, heroIndex, skill, enemyTarget);
+
+    // Gestion de l'xp
+    if(skill.type == "damage"){
+      if(team_enemies[enemyTarget].health <= 0){
+        gainXP("heroes", heroIndex, skill.value);
+        gainXP("heroes", heroIndex, 100);
+      }
+      else {
+        gainXP("heroes", heroIndex, skill.value);
+      }
+    } else if (skill.type == "heal"){
+      gainXP("heroes", heroIndex, skill.value);
+    }
+
+    removeDeadEnemies();
     team_heroes[heroTarget].availableplay = false;
+
+    if(heroTarget < team_heroes.length - 1) {
+      setHeroTarget(heroTarget + 1);
+    }
   };
 
   const handleSelectEnemyTarget = (targetIndex) => {
     setEnemyTarget(targetIndex);
+    setMenuDescription(false);
   };
-
+  
   const handleSelectHeroTarget = (targetIndex) => {
     setHeroTarget(targetIndex);
-    console.log(menuDescription);
+    setMenuDescription(true);
   };
+  
 
   const handleSecondaryMenu = (menu) => {
     setMenu(menu);
   };
 
-  const handleMenuDescription = () => {
-    setMenuDescription(!menuDescription);
+  const handleEndTurn = () => {
+    incrementTurn();
+    for (let i = 0; i < team_heroes.length; i++) {
+      team_heroes[i].availableplay = true;
+    }
+
+    // Met le menu attaque et selectionne le 1er hero
+    setMenu("attack");
+    handleSelectHeroTarget(0);
+    setMenuDescription(false);
+    removeDeadEnemies();
   };
 
+
+  // Vérifier si tous les ennemis sont morts
+useEffect(() => {
+  // Vérifier si tous les ennemis sont morts
+  if (!team_enemies.some(enemy => enemy.health > 0)) {
+    handleEndTurn(); // Fin du tour si tous les ennemis sont morts
+    spawnEnemies(); // Appeler spawnEnemies après le rendu
+  }
+}, [team_enemies, spawnEnemies]); // Dépendances: appel uniquement quand team_enemies change
+ 
   return (
     <main className="homepage">
       <section className="container">
         <section className="game">
-          <h2> Niveau 250</h2>
+          <div>
+            <p>Tour : {turn} </p>
+            <h2> Niveau {wave} </h2>
+          </div>
+
           <section className="game__characters">
             <div className="game__characters__heroes">
               {team_heroes.map((hero, i) => (
-                <button key={i} onClick={() => handleSelectHeroTarget(i)}>
+                <button
+                  key={i}
+                  onClick={() => handleSelectHeroTarget(i)}
+                  className={`heroes__card ${heroTarget === i ? 'selected' : ''}`}
+                >
                   <Character character={hero} team="heroes" />
                 </button>
               ))}
             </div>
             <div className="game__characters__enemies">
               {team_enemies.map((ennemy, i) => (
-                <button key={i} onClick={() => handleSelectEnemyTarget(i)}>
+                <button
+                  key={i}
+                  onClick={() => handleSelectEnemyTarget(i)}
+                  className={`enemies__card ${enemyTarget === i ? 'selected' : ''}`}
+                >
                   <Character key={i} character={ennemy} team="enemies" />
                 </button>
               ))}
@@ -67,22 +130,35 @@ function Homepage() {
         </section>
         <section className="action">
           <div className="action__container action__main__menu">
-            {team_heroes[heroTarget].availableplay === true ? (
-              <button onClick={() => handleSecondaryMenu("attack")}>
-                Attaque
-              </button>
-            ) : (
-              <button
-                onClick={() => handleSecondaryMenu("attack")}
-                className="unclickable"
-              >
-                Attaque
-              </button>
-            )}
-            <button onClick={() => handleSecondaryMenu("object")}>
+            <button
+              onClick={() => handleSecondaryMenu("attack")}
+              className={
+                team_heroes[heroTarget].availableplay === false
+                  ? "unclickable"
+                  : ""
+              }
+            >
+              Attaque
+            </button>
+            <button
+              onClick={() => handleSecondaryMenu("object")}
+              className={
+                team_heroes[heroTarget].availableplay === false
+                  ? "unclickable"
+                  : ""
+              }
+            >
               Objets
             </button>
-            <button onClick={() => handleSecondaryMenu("")}> Fuite </button>
+            <button
+              onClick={() => {
+                handleSecondaryMenu("endturn");
+                handleEndTurn();
+              }}
+            >
+              {" "}
+              Fin du tour{" "}
+            </button>
             <button onClick={() => handleSecondaryMenu("")}> Abandon </button>
           </div>
           <div className="action__container action__secondary__menu">
@@ -95,12 +171,10 @@ function Homepage() {
                     handleUseSkill("heroes", heroTarget, skill);
                     setMenuDescription(!menuDescription);
                   }}
-                  onMouseEnter={() =>
-                  {
-                    setHoveredSkillDescription(skill.description)
+                  onMouseEnter={() => {
+                    setHoveredSkillDescription(skill.description);
                     setMenuDescription(true);
-                  }
-                  }
+                  }}
                 >
                   {skill.name}
                 </button>
@@ -112,7 +186,7 @@ function Homepage() {
             ) : null}
           </div>
           <div className="action__container action__description">
-            { menuDescription
+            {menuDescription
               ? hoveredSkillDescription
               : log.slice(-8).map((msg, i) => <p key={i}> {msg}</p>)}
           </div>

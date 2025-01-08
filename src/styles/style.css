@@ -243,7 +243,7 @@ header .navbar .navbar__burger {
 }
 /* Pages */
 .container {
-  width: 95vw;
+  width: 100vw;
   height: calc(100vh - 60px);
   background-color: darksalmon;
 }
@@ -424,6 +424,14 @@ button {
 .unclickable {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.enemies__card:where(.selected) h3 {
+  color: red;
+}
+
+.heroes__card:where(.selected) h3 {
+  color: gold;
 }
 
 .action__main__menu {
